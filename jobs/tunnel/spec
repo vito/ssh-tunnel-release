@@ -1,0 +1,22 @@
+---
+name: tunnel
+
+templates:
+  tunnel_ctl: bin/tunnel_ctl
+  private_key.erb: private_key
+
+packages: []
+
+properties:
+  tunnel.destination.address:
+    description: "address for syslog drain (including port)"
+
+  tunnel.destination.user:
+    description: "user to authenticate as"
+
+  tunnel.destination.private_key:
+    description: "private key to use when authenticating"
+
+  tunnel.forward_rules:
+    description: "an array of ssh rules as from ssh -L, in the form of [local_port:host_addr:host_port]"
+    default: []

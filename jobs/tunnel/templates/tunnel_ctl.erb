@@ -1,0 +1,42 @@
+#!/bin/bash
+# vim: set ft=sh
+
+RUN_DIR=/var/vcap/sys/run/tunnel
+LOG_DIR=/var/vcap/sys/log/tunnel
+PIDFILE=$RUN_DIR/tunnel.pid
+
+PRIVATE_KEY=/var/vcap/jobs/tunnel/private_key
+
+case $1 in
+
+  start)
+    mkdir -p $RUN_DIR
+    chown -R vcap:vcap $RUN_DIR
+
+    mkdir -p $LOG_DIR
+    chown -R vcap:vcap $LOG_DIR
+
+    echo $$ > $PIDFILE
+
+    chmod 0600 $PRIVATE_KEY
+
+    exec ssh -N \
+      -i $PRIVATE_KEY \
+      <%= p("tunnel.forward_rules").collect { |r| "-L #{r}" }.join(" ") %> \
+      <%= p("tunnel.destination.user") %>@<%= p("tunnel.destination.address")
+      1>>$LOG_DIR/tunnel.stdout.log \
+      2>>$LOG_DIR/tunnel.stderr.log
+
+    ;;
+
+  stop)
+    kill "$(cat $PIDFILE)"
+
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+
+    ;;
+
+esac

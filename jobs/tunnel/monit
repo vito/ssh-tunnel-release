@@ -1,0 +1,5 @@
+check process tunnel
+  with pidfile /var/vcap/sys/run/tunnel/tunnel.pid
+  start program "/var/vcap/jobs/tunnel/bin/tunnel_ctl start"
+  stop program "/var/vcap/jobs/tunnel/bin/tunnel_ctl stop"
+  group vcap
