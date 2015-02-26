@@ -2,7 +2,7 @@
 name: tunnel
 
 templates:
-  tunnel_ctl: bin/tunnel_ctl
+  tunnel_ctl.erb: bin/tunnel_ctl
   private_key.erb: private_key
 
 packages: []

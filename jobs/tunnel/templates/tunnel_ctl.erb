@@ -21,9 +21,11 @@ case $1 in
     chmod 0600 $PRIVATE_KEY
 
     exec ssh -N \
+      -o 'StrictHostKeyChecking=no' \
+      -o 'LogLevel=quiet' \
       -i $PRIVATE_KEY \
       <%= p("tunnel.forward_rules").collect { |r| "-L #{r}" }.join(" ") %> \
-      <%= p("tunnel.destination.user") %>@<%= p("tunnel.destination.address")
+      <%= p("tunnel.destination.user") %>@<%= p("tunnel.destination.address") %> \
       1>>$LOG_DIR/tunnel.stdout.log \
       2>>$LOG_DIR/tunnel.stderr.log
 
